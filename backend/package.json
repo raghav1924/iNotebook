@@ -10,6 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^7.3.1"
+    "glob-parent": "^5.1.2",
+    "got": "^13.0.0",
+    "mongoose": "^7.3.1",
+    "node": "^20.3.1",
+    "semver": "^7.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.9"
   }
 }

@@ -2,6 +2,10 @@ const express=require('express');
 const User = require('../models/User');
 const {body,validationResult} =require('express-validator');
 const routes=express.Router();
+const bcryptjs=require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET_KEY='abhi_ka_liya_simple_ha';
 
 
 // Create a user using : POST "api/auth/createUser" doesnot require Auth
@@ -23,28 +27,37 @@ routes.post('/createUser',[
   console.log(user);
   if(user){
     return res.status(400).json({error:"SORRY THIS EMAIL ID ALREADY EXISTS!"})
-  }  
-    
+  } 
+  
+  // CREATING A SECURE PASSWORD USING SALT & HASHING BY BCRYPTJS
+    const salt= await bcryptjs.genSalt(10);
+    const secPass= await bcryptjs.hash(req.body.password,salt);
   // CREATE A NEW USER
   user=await User.create({
     name:req.body.name,
     email:req.body.email,
-    password:req.body.password
+    password:secPass
   })
 
-  
-  
   // .then(user=> res.json(user))
   // .catch(err=>{
   //   console.log(err);
   //   res.json({"error":"Enter a differnt Email ID ","message":err.message});
   // })
-  
-  res.send(user); 
+
+  const data={
+    user:{
+      id:user.id
+    }
+  }
+
+  const authToken= jwt.sign(data,JWT_SECRET_KEY);
+  console.table(authToken);
+  res.json({authToken}); 
     
 } catch (error) {
     console.error(error.message);
-    res.status(500).send("SOME ERROR OCCURED");
+    res.status(500).send("SOME ERROR OCCURED : "+error.message);
 }
 
 

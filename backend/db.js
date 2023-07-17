@@ -4,9 +4,9 @@ const mongoURI = "mongodb://localhost:27017/iNotebook";
 const connectToMongo = async () => {
   try {
     await mongoose.connect(mongoURI);
-    console.log("Connected to MongoDB Successfully");
+    console.log('\x1b[42m%s\x1b[0m',"Connected to MongoDB Successfully");
   } catch (error) {
-    console.error("Failed to connect to MongoDB", error);
+    console.error('\x1b[41m%s\x1b[0m',"Failed to connect to MongoDB Reason :\n", error);
   }
 };
 

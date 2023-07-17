@@ -12,7 +12,7 @@ app.use('/api/notes',require('./routes/notes'))
 
 
 app.listen(port,()=>{
-    console.log('\x1b[33m%s\x1b[0m',`Example app listing to http://localhost:${port}`)
+    console.log('\x1b[33m%s\x1b[0m',`iNotebook Backend listing to http://localhost:${port}`)
 })
 
 

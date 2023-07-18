@@ -1,16 +1,16 @@
-import React, { useContext } from "react";
-import noteContext from "../context/notes/noteContext";
+import React from "react";
+// import noteContext from "../context/notes/noteContext";
 import Notes from "./Notes";
 
 const Home = () => {
-  const context=useContext(noteContext);
-  const {notes,setNotes}=context;
+  // const context=useContext(noteContext);
+  // const {notes,setNotes}=context;
 
   return (
-    <div>
+    <div >
       <div className="container my-3 p-3 d-flex flex-column justify-content-center align-items-center shadow-sm">
         <h1>Add a Note</h1>
-        <form className="shadow p-3" style={{width:"35rem"}}>
+        <form className="shadow p-3" style={{width:"35rem" }} >
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
               Note Title

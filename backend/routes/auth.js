@@ -5,8 +5,9 @@ const routes = express.Router();
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const fetchuser = require("../middleware/fetchuser");
+require("dotenv").config();
 
-const JWT_SECRET_KEY = "abhi_ka_liya_simple_ha";
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // ROUTE 1: Create a user using : POST "api/auth/createUser" doesnot require Auth
 routes.post(
@@ -19,17 +20,18 @@ routes.post(
   async (req, res) => {
     // IF THERE IS A ERROR , RETURN BAD REQUEST AND THE ERROR
     const result = validationResult(req);
+    let success=false;
     if (!result.isEmpty()) {
       return res.send({ errors: result.array() });
     }
     // CHECK WETHER THE USER WITH THIS EMAIL EXISTS ALREADY
     try {
       let user = await User.findOne({ email: req.body.email });
-      console.log(user);
+      // console.log(user);
       if (user) {
         return res
           .status(400)
-          .json({ error: "SORRY THIS EMAIL ID ALREADY EXISTS!" });
+          .json({ success,error: "SORRY THIS EMAIL ID ALREADY EXISTS!" });
       }
 
       // CREATING A SECURE PASSWORD USING SALT & HASHING BY BCRYPTJS
@@ -55,8 +57,9 @@ routes.post(
       };
 
       const authToken = jwt.sign(data, JWT_SECRET_KEY);
-      console.table(authToken);
-      res.json({ authToken });
+      // console.table(authToken);
+      success=true;
+      res.json({ success,authToken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("INTERNAL SERVER ERROR ");
@@ -74,6 +77,7 @@ routes.post(
   async (req, res) => {
     // IF THERE IS A ERROR , RETURN BAD REQUEST AND THE ERROR
     const result = validationResult(req);
+    let success=false;
     if (!result.isEmpty()) {
       return res.send({ errors: result.array() });
     }
@@ -84,13 +88,13 @@ routes.post(
       if (!user)
         return res
           .status(400)
-          .json({ error: "PLEASE TRY TO LOGIN WITH CORRECT CREDENTIALS" });
+          .json({ success,error: "PLEASE TRY TO LOGIN WITH CORRECT CREDENTIALS" });
 
       const passwrodCompare = await bcryptjs.compare(password, user.password);
       if (!passwrodCompare)
         return res
           .status(400)
-          .json({ error: "PLEASE TRY TO LOGIN WITH CORRECT CREDENTIALS" });
+          .json({ success,error: "PLEASE TRY TO LOGIN WITH CORRECT CREDENTIALS" });
       const data = {
         user: {
           id: user.id,
@@ -99,7 +103,8 @@ routes.post(
 
       const authToken = jwt.sign(data, JWT_SECRET_KEY);
       // console.table(authToken);
-      res.json({ authToken });
+      success=true;
+      res.json({ success,authToken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("INTERNAL SERVER ERROR ");
